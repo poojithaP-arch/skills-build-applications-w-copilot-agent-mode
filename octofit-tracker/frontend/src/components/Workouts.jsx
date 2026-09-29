@@ -1,8 +1,13 @@
 import CollectionView from './CollectionView.jsx'
+import { API_BASE_URL } from '../api.js'
 import useCollection from './useCollection.js'
 
 function Workouts() {
-  const request = useCollection('workouts')
+  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+  const workoutsEndpoint = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api/workouts/`
+    : `${API_BASE_URL}/api/workouts/`
+  const request = useCollection(workoutsEndpoint)
   const columns = [
     {
       key: 'title',

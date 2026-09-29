@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { fetchCollection } from '../api.js'
 
-export default function useCollection(collection) {
+export default function useCollection(endpoint) {
   const [items, setItems] = useState([])
   const [status, setStatus] = useState('loading')
   const [error, setError] = useState('')
@@ -10,7 +10,7 @@ export default function useCollection(collection) {
   useEffect(() => {
     const controller = new AbortController()
 
-    fetchCollection(collection, controller.signal)
+    fetchCollection(endpoint, controller.signal)
       .then((records) => {
         setItems(records)
         setStatus('ready')
@@ -22,7 +22,7 @@ export default function useCollection(collection) {
       })
 
     return () => controller.abort()
-  }, [collection, refreshKey])
+  }, [endpoint, refreshKey])
 
   function refresh() {
     setError('')

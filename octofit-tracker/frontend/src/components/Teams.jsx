@@ -1,9 +1,14 @@
 import CollectionView from './CollectionView.jsx'
 import { compactId } from './formatters.js'
+import { API_BASE_URL } from '../api.js'
 import useCollection from './useCollection.js'
 
 function Teams() {
-  const request = useCollection('teams')
+  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+  const teamsEndpoint = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api/teams/`
+    : `${API_BASE_URL}/api/teams/`
+  const request = useCollection(teamsEndpoint)
   const columns = [
     {
       key: 'name',

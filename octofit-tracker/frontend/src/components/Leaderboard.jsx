@@ -1,10 +1,15 @@
 import CollectionView from './CollectionView.jsx'
 import { initials, memberName, referenceId } from './formatters.js'
+import { API_BASE_URL, buildApiEndpoint } from '../api.js'
 import useCollection from './useCollection.js'
 
 function Leaderboard() {
-  const leaderboardRequest = useCollection('leaderboard')
-  const usersRequest = useCollection('users')
+  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+  const leaderboardEndpoint = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api/leaderboard/`
+    : `${API_BASE_URL}/api/leaderboard/`
+  const leaderboardRequest = useCollection(leaderboardEndpoint)
+  const usersRequest = useCollection(buildApiEndpoint('users'))
   const usersById = new Map(usersRequest.items.map((user) => [referenceId(user._id || user.id), user]))
 
   const columns = [

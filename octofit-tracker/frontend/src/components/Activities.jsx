@@ -1,10 +1,15 @@
 import CollectionView from './CollectionView.jsx'
 import { compactId, formatDate, initials, memberName, referenceId } from './formatters.js'
+import { API_BASE_URL, buildApiEndpoint } from '../api.js'
 import useCollection from './useCollection.js'
 
 function Activities() {
-  const activityRequest = useCollection('activities')
-  const usersRequest = useCollection('users')
+  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim()
+  const activitiesEndpoint = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev/api/activities/`
+    : `${API_BASE_URL}/api/activities/`
+  const activityRequest = useCollection(activitiesEndpoint)
+  const usersRequest = useCollection(buildApiEndpoint('users'))
   const usersById = new Map(usersRequest.items.map((user) => [referenceId(user._id || user.id), user]))
 
   const columns = [
